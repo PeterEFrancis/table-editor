@@ -420,8 +420,9 @@
     }
 
     function get_html() {
-      var h = "<table>\n\t<tr>";
+      var h = "<table>";
       for (var r = 0; r < contents.length; r++) {
+        h += "\n\t<tr>"
         for (var c = 0; c < contents[r].length; c++) {
           h += "\n\t\t<td>" + contents[r][c] + "</td>";
         }
