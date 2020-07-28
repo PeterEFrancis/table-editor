@@ -36,10 +36,6 @@
 
 
 
-    function has_selection() {
-      return selected != null && selected != "" && selected != "-";
-    }
-
     function get_letter(n) {
       n += 1;
       var s = "";
@@ -56,6 +52,30 @@
       }
       return get_number(letters.slice(letters.length - 1)) + 26 * get_number(letters.slice(0, letters.length - 1));
     }
+
+    function format_string_left(content, total, fill) {
+      var out = String(content);
+      for (var s = 0; s < total - content.length; s++) {
+        out += fill;
+      }
+      return out;
+    }
+
+    function get_column_widths() {
+      var col_widths = [];
+      for (var c = 0; c < contents[0].length; c++) {
+        col_widths[c] = 1;
+      }
+      for (var r = 0; r < contents.length; r++) {
+        for (var c = 0; c < contents[r].length; c++) {
+          if (contents[r][c].length > col_widths[c]) {
+            col_widths[c] = contents[r][c].length;
+          }
+        }
+      }
+      return col_widths;
+    }
+
 
 
 
@@ -198,6 +218,8 @@
 
 
 
+
+
     function disable_buttons(bool1, bool2, bool3) {
       document.getElementById('delete').disabled = bool1;
       document.getElementById('insert').disabled = bool2;
@@ -207,6 +229,12 @@
 
 
 
+
+
+
+    function has_selection() {
+      return selected != null && selected != "" && selected != "-";
+    }
 
     function deselect() {
       var selected_elements = document.getElementsByClassName("selected");
@@ -346,29 +374,12 @@
     function export_to_all() {
       if (contents.length > 0) {
         document.getElementById('export-markdown').innerHTML = get_markdown();
+        document.getElementById('export-LaTeX').innerHTML = get_LaTeX();
       }
-    }
-
-    function format_string_left(content, total, fill) {
-      var out = String(content);
-      for (var s = 0; s < total - content.length; s++) {
-        out += fill;
-      }
-      return out;
     }
 
     function get_markdown() {
-      var col_widths = [];
-      for (var c = 0; c < contents[0].length; c++) {
-        col_widths[c] = 1;
-      }
-      for (var r = 0; r < contents.length; r++) {
-        for (var c = 0; c < contents[r].length; c++) {
-          if (contents[r][c].length > col_widths[c]) {
-            col_widths[c] = contents[r][c].length;
-          }
-        }
-      }
+      var col_widths = get_column_widths();
       var md = "|";
       for (var c = 0; c < contents[0].length; c++) {
         md += " " + format_string_left(contents[0][c], col_widths[c], " ") + " |";
@@ -385,6 +396,36 @@
       }
       return md;
     }
+
+    function get_LaTeX() {
+      var col_widths = get_column_widths();
+      var ltx = "\\begin{table}[]\n\t\\begin{tabular}{";
+      for (var c = 0; c < contents[0].length; c++) {
+        ltx += " c "
+      }
+      ltx += "}";
+      for (var r = 0; r < contents.length; r++) {
+        ltx += "\n\t\t";
+        for (var c = 0; c < contents[r].length; c++) {
+          ltx += " " + format_string_left(contents[r][c], col_widths[c], " ");
+          if (c != contents[r].length - 1) {
+            ltx += " &";
+          }
+        }
+        ltx += " \\\\";
+      }
+      ltx += "\n\t\\end{tabular}\n\\begin{table}";
+      return ltx;
+    }
+
+    // \begin{table}[]
+    // \begin{tabular}{lll}
+    //  &  &  \\
+    //  &  &  \\
+    //  &  &
+    // \end{tabular}
+    // \end{table}
+
 
     function save_to_file() {
       var t = "";
