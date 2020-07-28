@@ -375,6 +375,7 @@
       if (contents.length > 0) {
         document.getElementById('export-markdown').innerHTML = get_markdown();
         document.getElementById('export-LaTeX').innerHTML = get_LaTeX();
+        document.getElementById('export-HTML').innerHTML = get_html();
       }
     }
 
@@ -414,17 +415,21 @@
         }
         ltx += " \\\\";
       }
-      ltx += "\n\t\\end{tabular}\n\\begin{table}";
+      ltx += "\n\t\\end{tabular}\n\\end{table}";
       return ltx;
     }
 
-    // \begin{table}[]
-    // \begin{tabular}{lll}
-    //  &  &  \\
-    //  &  &  \\
-    //  &  &
-    // \end{tabular}
-    // \end{table}
+    function get_html() {
+      var h = "<table>\n\t<tr>";
+      for (var r = 0; r < contents.length; r++) {
+        for (var c = 0; c < contents[r].length; c++) {
+          h += "\n\t\t<td>" + contents[r][c] + "</td>";
+        }
+        h += "\n\t</tr>";
+      }
+      h += "\n</table>";
+      return h;
+		}
 
 
     function save_to_file() {
