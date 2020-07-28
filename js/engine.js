@@ -7,7 +7,7 @@
     var row_del_out = "\n";
     var col_del_out = ",";
 
-    var contents = [];
+    var contents = [[""]];
 
     var num_cols;
     var num_rows;
@@ -17,9 +17,27 @@
     var selected = "";
 
     const LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    var table = document.getElementById("contents");
+    initialize_empty();
+
+
+    function initialize_empty() {
+      var head = document.createElement('tr');
+      head.appendChild(create_th("-", ""));
+      head.appendChild(create_th('a', 'A'));
+      table.appendChild(head)
+      add_row();
+      clearInterval(intervalId);
+      intervalId = setInterval(display_to_contents, 100);
+      disable_buttons(true, true, false);
+    }
+
+
+
+
 
     function has_selection() {
-      return selected != "" && selected != "-";
+      return selected != null && selected != "" && selected != "-";
     }
 
     function get_letter(n) {
@@ -38,6 +56,8 @@
       }
       return get_number(letters.slice(letters.length - 1)) + 26 * get_number(letters.slice(0, letters.length - 1));
     }
+
+
 
     function onChooseFile(event) {
       if (typeof window.FileReader !== 'function')
@@ -58,7 +78,8 @@
         text = e.target.result;
         split_text_to_contents();
         contents_to_display();
-        disable_buttons(false, false);
+        deselect();
+        disable_buttons(true, true, false);
       }
       fr.readAsText(file);
     }
@@ -87,13 +108,37 @@
       }
     }
 
+
+
+
+
+    function get_num_data_rows() {
+      if (table.childNodes.length == 0) {
+        return 0;
+      }
+      return table.childNodes.length - 1;
+    }
+
+    function get_num_data_cols() {
+      if (table.childNodes.length == 0) {
+        return 0;
+      }
+      if (table.childNodes[0].childNodes.length == 0) {
+        return 0;
+      }
+      return table.childNodes[0].childNodes.length - 1;
+    }
+
+
+
+
     function create_td(id) {
       var td = document.createElement("td");
       var input = document.createElement('input');
       input.classList.add('square');
       input.setAttribute('id', id);
       td.appendChild(input);
-      td.onclick = select_cell;
+      td.onclick = select_cell_from_event;
       return td;
     }
 
@@ -101,7 +146,7 @@
       var th = document.createElement("th");
       th.setAttribute('id', id);
       th.classList.add('header');
-      th.onclick = select_cell;
+      th.onclick = select_cell_from_event;
       th.innerText = text;
       return th;
     }
@@ -115,15 +160,17 @@
       return tr;
     }
 
+
+
+
     function contents_to_display() {
-      var table = document.getElementById('contents');
       while (table.firstChild) {
         table.removeChild(table.lastChild);
       }
       var head = document.createElement('tr');
       head.appendChild(create_th("-", ""));
       for (var c = 0; c < contents[0].length; c++) {
-        head.appendChild(create_th(get_letter(c), get_letter(c)));
+        head.appendChild(create_th(get_letter(c), get_letter(c).toUpperCase()));
       }
       table.appendChild(head);
       for (var r = 0; r < contents.length; r++) {
@@ -133,13 +180,10 @@
         }
         table.appendChild(tr);
       }
-      clearInterval(intervalId);
-      intervalId = setInterval(display_to_contents, 100);
     }
 
     function display_to_contents() {
       contents = [];
-      var table = document.getElementById("contents");
       var rows = table.childNodes;
       for (var r = 1; r < rows.length; r++) {
         var content_row = [];
@@ -151,10 +195,18 @@
       }
     }
 
-    function disable_buttons(bool1, bool2) {
+
+
+
+    function disable_buttons(bool1, bool2, bool3) {
       document.getElementById('delete').disabled = bool1;
       document.getElementById('insert').disabled = bool2;
+      document.getElementById('add-row').disabled = bool3;
+      document.getElementById('add-col').disabled = bool3;
     }
+
+
+
 
     function deselect() {
       var selected_elements = document.getElementsByClassName("selected");
@@ -163,15 +215,14 @@
         selected_elements[0].classList.remove("selected");
       }
       selected = "";
-      disable_buttons(true, true);
+      disable_buttons(true, true, false);
     }
 
-    function select_cell(e) {
+    function select_cell(cellID) {
       // remove selected from all cells
       deselect();
-      // get current clicked cell and add .selected
-      selected = e.srcElement.getAttribute("id");
-      if (!selected.includes("-") && has_selection()) {
+      selected = cellID;
+      if (has_selection() && !selected.includes("-")) {
         document.getElementById(selected).classList.add("selected");
         // highlight row or column
         var squares = document.getElementsByTagName('td');
@@ -180,18 +231,23 @@
             squares[i].classList.add("selected");
           }
         }
-        disable_buttons(isNaN(selected) ? contents[0].length == 1 : contents.length == 1, false);
+        disable_buttons(isNaN(selected) ? get_num_data_cols() == 1 : get_num_data_rows() == 1, false, false);
       }
+    }
+
+    function select_cell_from_event(e) {
+      selected = e.srcElement.getAttribute("id");
+      select_cell(selected);
     }
 
     function delete_selected() {
       if (has_selection()) {
         if (isNaN(selected)) {
-          if (contents[0].length > 1) {
+          if (get_num_data_cols() > 1) {
             delete_column(get_number(selected));
           }
         } else {
-          if (contents.length > 1) {
+          if (get_num_data_rows() > 1) {
             delete_row(Number(selected));
           }
         }
@@ -199,8 +255,23 @@
       // deselect();
     }
 
+
+
+
+
+    function delete_row(row) {
+      var rows = table.childNodes;
+      for (var r = row; r < rows.length - 1; r++) {
+        var trs1 = rows[r].childNodes;
+        var trs2 = rows[r + 1].childNodes;
+        for (var c = 0; c < trs1.length; c++) {
+          trs1[c].firstChild.value = trs2[c].firstChild.value;
+        }
+      }
+      table.removeChild(table.lastChild);
+    }
+
     function delete_column(col) {
-      var table = document.getElementById("contents");
       var rows = table.childNodes;
       rows[0].removeChild(rows[0].lastChild);
       for (var r = 1; r < rows.length; r++) {
@@ -212,17 +283,20 @@
       }
     }
 
-    function delete_row(row) {
-      var table = document.getElementById("contents");
+    function add_row() {
+      table.appendChild(create_row(get_num_data_rows() + 1, get_num_data_cols()));
+      select_cell(selected);
+    }
+
+    function add_column() {
       var rows = table.childNodes;
-      for (var r = row; r < rows.length - 1; r++) {
-        var trs1 = rows[r].childNodes;
-        var trs2 = rows[r + 1].childNodes;
-        for (var c = 0; c < trs1.length; c++) {
-          trs1[c].firstChild.value = trs2[c].firstChild.value;
-        }
+      var letter = get_letter(get_num_data_cols());
+      var th = create_th(letter, letter.toUpperCase());
+      rows[0].appendChild(th);
+      for (var r = 1; r < rows.length; r++) {
+        rows[r].appendChild(create_td(r + "-" + letter));
       }
-      table.removeChild(table.lastChild);
+      select_cell(selected);
     }
 
     function insert_selected() {
@@ -236,9 +310,7 @@
     }
 
     function insert_row(row) {
-      var table = document.getElementById("contents");
-      var blank = create_row(contents.length + 1, contents[0].length);
-      table.appendChild(blank);
+      add_row();
       var rows = table.childNodes;
       var trs1, trs2;
       for (var r = rows.length - 1; r > row; r--) {
@@ -255,19 +327,21 @@
     }
 
     function insert_column(col) {
-      var table = document.getElementById("contents");
+      add_column();
       var rows = table.childNodes;
-      var th = create_th(get_letter(rows[0].childNodes.length - 1), get_letter(rows[0].childNodes.length - 1));
-      rows[0].appendChild(th);
       for (var r = 1; r < rows.length; r++) {
         var trs = rows[r].childNodes;
-        rows[r].appendChild(create_td(r + "-" + get_letter(trs.length - 1)));
         for (var c = trs.length - 1; c > col; c--) {
           trs[c].firstChild.value = trs[c - 1].firstChild.value;
         }
         trs[col].firstChild.value = "";
       }
     }
+
+
+
+
+
 
     function export_to_all() {
       if (contents.length > 0) {
@@ -286,7 +360,7 @@
     function get_markdown() {
       var col_widths = [];
       for (var c = 0; c < contents[0].length; c++) {
-        col_widths[c] = 0;
+        col_widths[c] = 1;
       }
       for (var r = 0; r < contents.length; r++) {
         for (var c = 0; c < contents[r].length; c++) {
@@ -310,16 +384,6 @@
         }
       }
       return md;
-    }
-
-
-    function SaveAsFile(t,f,m) {
-      try {
-          var b = new Blob([t],{type:m});
-          saveAs(b, f);
-      } catch (e) {
-          window.open("data:"+m+"," + encodeURIComponent(t), '_blank','');
-      }
     }
 
     function save_to_file() {

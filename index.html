@@ -22,6 +22,7 @@
       table td, th {
         border: 2px solid lightgrey;
         width: 75px;
+        min-width: 50px;
       }
 
       .header {
@@ -92,18 +93,26 @@
           </div>
         </div>
         <div class="col-md-3">
-          <button class="btn btn-default btn-block" onclick="load()">Load Table</button>
+          <button class="btn btn-primary btn-block" onclick="load()">Load Table</button>
         </div>
       </div>
 
       <hr>
       <h3>2. Edit</h3>
       <br>
-      <button id="delete" class="btn btn-default" onclick="delete_selected()" disabled>
-        <span class="glyphicon glyphicon-minus"></span>
+      <div class="btn-group">
+        <button id="delete" class="btn btn-default" onclick="delete_selected()">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
+        <button id="insert" class="btn btn-default" onclick="insert_selected()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div>
+      <button id="add-row" class="btn btn-default" onclick="add_row()">
+        Add Row
       </button>
-      <button id="insert" class="btn btn-default" onclick="insert_selected()" disabled>
-        <span class="glyphicon glyphicon-plus"></span>
+      <button id="add-col" class="btn btn-default" onclick="add_column()">
+        Add Column
       </button>
       <br><br>
       <table id="contents"></table>
