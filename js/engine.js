@@ -397,5 +397,12 @@
         }
         t += row_del_out;
       }
-      SaveAsFile(t, file.name, "text/plain;charset=utf-8");
+      var name = "";
+      if (file) {
+        var dot = file.name.lastIndexOf(".");
+        name += file.name.slice(0,dot) + "_";
+      }
+      name += "PEF_table_editor_file";
+      console.log(name);
+      SaveAsFile(t, name, "text/plain;charset=utf-8");
     }
