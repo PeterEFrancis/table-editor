@@ -55,10 +55,11 @@
 
       .output {
         width: 100%;
-        height: 200px;
+        height: 250px;
         resize: none;
         font-family: monospace;
         tab-size: 1em;
+        user-select: none;
       }
 
 
@@ -121,21 +122,21 @@
       <hr>
       <h3>3. Export</h3>
       <br>
-      <button class="btn btn-lg btn-primary" style="margin-bottom: 30px" onclick="export_to_all()">
-        <span class="glyphicon glyphicon-arrow-down"></span> Export
+      <button class="btn btn-primary" style="margin-bottom: 30px" onclick="export_to_all()">
+        <span class="glyphicon glyphicon-export"></span> Export
       </button>
       <div class="row">
         <div class="col-sm-4">
           <h4>Markdown</h4>
-          <textarea id="export-markdown" class="output"></textarea>
+          <textarea id="export-markdown" class="output" readonly onclick="this.select()"></textarea>
         </div>
         <div class="col-sm-4">
           <h4>LaTeX</h4>
-          <textarea id="export-LaTeX" class="output"></textarea>
+          <textarea id="export-LaTeX" class="output" readonly onclick="this.select()"></textarea>
         </div>
         <div class="col-sm-4">
           <h4>HTML</h4>
-          <textarea id="export-HTML" class="output"></textarea>
+          <textarea id="export-HTML" class="output" readonly onclick="this.select()"></textarea>
         </div>
       </div>
 
@@ -156,7 +157,7 @@
       </div>
       <div class="col-md-6">
         <button class="btn btn-success" style="margin-bottom: 30px" onclick="save_to_file()">
-          <span class="glyphicon glyphicon-arrow-right"></span> Save
+          <span class="glyphicon glyphicon-save"></span> Save
         </button>
       </div>
 
