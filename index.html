@@ -15,6 +15,11 @@
     <title>Table Editor</title>
 
     <style>
+
+      body {
+        margin-bottom: 100px;
+      }
+
       hr {
         margin-top: 40px;
       }
@@ -167,7 +172,7 @@
       <hr>
       <h3>4. Save</h3>
       <br>
-      <div class="col-md-4">
+      <!-- <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">
             Row Delimiter
@@ -203,22 +208,29 @@
             </label>
           </div>
         </div>
+      </div> -->
+
+      <div class="col-md-4">
+        <button class="btn btn-success btn-block" style="margin-bottom: 30px" onclick="save_to_file(format('\n',','))">
+          <span class="glyphicon glyphicon-save"></span> Save CSV
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-success btn-block" style="margin-bottom: 30px" onclick="save_to_file(format('\n','\t'))">
+          <span class="glyphicon glyphicon-save"></span> Save TSV
+        </button>
       </div>
 
-      <!-- <div class="col-md-3">
-        <div class="input-group">
-          <span class="input-group-addon">Row Deliminator</span>
-          <input id="row-deliminator-out" type="text" class="form-control" onchange="row_del_out=this.value" placeholder="\n"/>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="input-group">
-          <span class="input-group-addon">Column Deliminator</span>
-          <input id="col-deliminator-out" type="text" class="form-control" onchange="col_del_out=this.value" placeholder=",">
-        </div>
-      </div> -->
       <div class="col-md-4">
-        <button class="btn btn-success btn-block" style="margin-bottom: 30px" onclick="save_to_file()">
+        <div class="input-group" style="margin-bottom: 20px">
+          <span class="input-group-addon">Row Deliminator</span>
+          <input id="other-row-del-out" type="text" class="form-control" onchange="row_del_out=this.value" value=";"/>
+        </div>
+        <div class="input-group" style="margin-bottom: 20px">
+          <span class="input-group-addon">Column Deliminator</span>
+          <input id="other-col-del-out" type="text" class="form-control" onchange="col_del_out=this.value" value=",">
+        </div>
+        <button class="btn btn-success btn-block" style="margin-bottom: 30px" onclick="get_rd_cd_out(); save_to_file(format(row_del_out, col_del_out))">
           <span class="glyphicon glyphicon-save"></span> Save
         </button>
       </div>

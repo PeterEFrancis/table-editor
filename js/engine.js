@@ -4,8 +4,8 @@
     var text = "";
     var row_del = "\n";
     var col_del = ",";
-    var row_del_out = "\n";
-    var col_del_out = ",";
+    var row_del_out;
+    var col_del_out;
 
     var contents = [[""]];
 
@@ -444,32 +444,47 @@
 		}
 
 
-    function save_to_file() {
-      row_del_out = document.querySelector('input[name="row-del-out"]:checked').value;
-      if (row_del_out == "") {
-        row_del_out = docuement.getElementById("other-row-del-out");
-      }
-      row_del_out = new RegExp(row_del_out);
-      col_del_out = document.querySelector('input[name="col-del-out"]:checked').value;
-      if (col_del_out == "") {
-        col_del_out = docuement.getElementById("other-col-del-out");
-      }
-      col_del_out = new RegExp(col_del_out);
-      var t = "";
-      for (var r = 0; r < contents.length; r++) {
-        for (var c = 0; c < contents[0].length; c++) {
-          t += contents[r][c];
-          if (c != contents[0].length - 1) {
-            t += col_del_out;
-          }
-        }
-        t += row_del_out;
-      }
+
+
+
+    function get_rd_cd_out() {
+      // row_del_out = document.querySelector('input[name="row-del-out"]:checked').value;
+      // if (row_del_out == "") {
+        row_del_out = document.getElementById("other-row-del-out").value;
+      // }
+      // row_del_out = new RegExp(row_del_out);
+      // col_del_out = document.querySelector('input[name="col-del-out"]:checked').value;
+      // if (col_del_out == "") {
+        col_del_out = document.getElementById("other-col-del-out").value;
+      // }
+      // col_del_out = new RegExp(col_del_out);
+    }
+
+
+
+
+    function save_to_file(text) {
       var name = "";
       if (file) {
         var dot = file.name.lastIndexOf(".");
         name += file.name.slice(0,dot) + "_";
       }
       name += "PEF_table_editor_file";
-      SaveAsFile(t, name, "text/plain;charset=utf-8");
+      SaveAsFile(text, name, "text/plain;charset=utf-8");
+    }
+
+
+
+    function format(rd, cd) {
+      var t = "";
+      for (var r = 0; r < contents.length; r++) {
+        for (var c = 0; c < contents[0].length; c++) {
+          t += contents[r][c];
+          if (c != contents[0].length - 1) {
+            t += cd;
+          }
+        }
+        t += rd;
+      }
+      return t;
     }
