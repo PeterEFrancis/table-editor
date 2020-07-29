@@ -79,23 +79,47 @@
       <h3>1. Load</h3>
       <br>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
           <input type='file' class='input' onchange='onChooseFile(event)' />
+          <br>
+          <button id="load" class="btn btn-primary btn-block" onclick="load()" disabled>Load Table</button>
         </div>
-        <div class="col-md-3">
-          <div class="input-group">
-            <span class="input-group-addon">Row Deliminator</span>
-            <input id="row-deliminator" type="text" class="form-control" onchange="row_del=this.value" placeholder="\n"/>
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Row Delimiter
+            </div>
+            <div class="panel-body">
+              <label>
+                <input type="radio" name="row-del" value='\n' checked> Newline ("\n")
+              </label><br>
+              <label>
+                <input id="other-row-del-radio" type="radio" name="row-del" value="">
+                Other: <input type="text" id="other-row-del" style="width: 4em"
+                              onclick="document.getElementById('other-row-del-radio').checked = true;"/>
+              </label>
+            </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="input-group">
-            <span class="input-group-addon">Column Deliminator</span>
-            <input id="col-deliminator" type="text" class="form-control" onchange="col_del=this.value" placeholder=",">
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              Column Delimiter
+            </div>
+            <div class="panel-body">
+              <label>
+                <input type="radio" name="col-del" value="," checked> Comma (",")
+              </label><br>
+              <label>
+                <input type="radio" name="col-del" value="\t"> Tab ("	")
+              </label><br>
+              <label>
+                <input id="other-col-del-radio" type="radio" name="col-del" value="">
+                Other: <input type="text" name="other-col-del" style="width: 4em"
+                              onclick="document.getElementById('other-col-del-radio').checked = true;"/>
+              </label>
+            </div>
           </div>
-        </div>
-        <div class="col-md-3">
-          <button class="btn btn-primary btn-block" onclick="load()">Load Table</button>
         </div>
       </div>
 
@@ -143,7 +167,45 @@
       <hr>
       <h3>4. Save</h3>
       <br>
-      <div class="col-md-3">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Row Delimiter
+          </div>
+          <div class="panel-body">
+            <label>
+              <input type="radio" name="row-del-out" value='\n' checked> Newline ("\n")
+            </label><br>
+            <label>
+              <input id="other-row-del-out-radio" type="radio" name="row-del-out" value="">
+              Other: <input type="text" id="other-row-out-del" style="width: 4em"
+                            onclick="document.getElementById('other-row-del-out-radio').checked = true;"/>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Column Delimiter
+          </div>
+          <div class="panel-body">
+            <label>
+              <input type="radio" name="col-del-out" value="," checked> Comma (",")
+            </label><br>
+            <label>
+              <input type="radio" name="col-del-out" value="\t"> Tab ("	")
+            </label><br>
+            <label>
+              <input id="other-col-del-out-radio" type="radio" name="col-del-out" value="">
+              Other: <input type="text" name="other-col-del-out" style="width: 4em"
+                            onclick="document.getElementById('other-col-del-out-radio').checked = true;"/>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-3">
         <div class="input-group">
           <span class="input-group-addon">Row Deliminator</span>
           <input id="row-deliminator-out" type="text" class="form-control" onchange="row_del_out=this.value" placeholder="\n"/>
@@ -154,9 +216,9 @@
           <span class="input-group-addon">Column Deliminator</span>
           <input id="col-deliminator-out" type="text" class="form-control" onchange="col_del_out=this.value" placeholder=",">
         </div>
-      </div>
-      <div class="col-md-6">
-        <button class="btn btn-success" style="margin-bottom: 30px" onclick="save_to_file()">
+      </div> -->
+      <div class="col-md-4">
+        <button class="btn btn-success btn-block" style="margin-bottom: 30px" onclick="save_to_file()">
           <span class="glyphicon glyphicon-save"></span> Save
         </button>
       </div>

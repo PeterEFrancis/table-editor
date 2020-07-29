@@ -90,9 +90,20 @@
       if (!input.files[0])
         return undefined;
       file = input.files[0];
+      document.getElementById('load').disabled = false;
     }
 
     function load() {
+      row_del = document.querySelector('input[name="row-del"]:checked').value;
+      if (row_del == "") {
+        row_del = docuement.getElementById("other-row-del");
+      }
+      row_del = new RegExp(row_del);
+      col_del = document.querySelector('input[name="col-del"]:checked').value;
+      if (col_del == "") {
+        col_del = docuement.getElementById("other-col-del");
+      }
+      col_del = new RegExp(col_del);
       var fr = new FileReader();
       fr.onload = function(e) {
         text = e.target.result;
@@ -434,6 +445,16 @@
 
 
     function save_to_file() {
+      row_del_out = document.querySelector('input[name="row-del-out"]:checked').value;
+      if (row_del_out == "") {
+        row_del_out = docuement.getElementById("other-row-del-out");
+      }
+      row_del_out = new RegExp(row_del_out);
+      col_del_out = document.querySelector('input[name="col-del-out"]:checked').value;
+      if (col_del_out == "") {
+        col_del_out = docuement.getElementById("other-col-del-out");
+      }
+      col_del_out = new RegExp(col_del_out);
       var t = "";
       for (var r = 0; r < contents.length; r++) {
         for (var c = 0; c < contents[0].length; c++) {
@@ -450,6 +471,5 @@
         name += file.name.slice(0,dot) + "_";
       }
       name += "PEF_table_editor_file";
-      console.log(name);
       SaveAsFile(t, name, "text/plain;charset=utf-8");
     }
