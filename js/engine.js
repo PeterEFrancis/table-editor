@@ -36,6 +36,7 @@
 
 
 
+
     function get_letter(n) {
       n += 1;
       var s = "";
@@ -75,6 +76,8 @@
       }
       return col_widths;
     }
+
+
 
 
 
@@ -143,6 +146,7 @@
 
 
 
+
     function get_num_data_rows() {
       if (table.childNodes.length == 0) {
         return 0;
@@ -159,6 +163,7 @@
       }
       return table.childNodes[0].childNodes.length - 1;
     }
+
 
 
 
@@ -190,6 +195,7 @@
       }
       return tr;
     }
+
 
 
 
@@ -243,6 +249,7 @@
 
 
 
+
     function has_selection() {
       return selected != null && selected != "" && selected != "-";
     }
@@ -279,6 +286,13 @@
       select_cell(selected);
     }
 
+
+
+
+
+
+
+
     function delete_selected() {
       if (has_selection()) {
         if (isNaN(selected)) {
@@ -294,11 +308,10 @@
       // deselect();
     }
 
-
-
-
-
     function delete_row(row) {
+      if (row == get_num_data_rows()) {
+        deselect();
+      }
       var rows = table.childNodes;
       for (var r = row; r < rows.length - 1; r++) {
         var trs1 = rows[r].childNodes;
@@ -311,6 +324,9 @@
     }
 
     function delete_column(col) {
+      if (col == get_num_data_cols()) {
+        deselect();
+      }
       var rows = table.childNodes;
       rows[0].removeChild(rows[0].lastChild);
       for (var r = 1; r < rows.length; r++) {
@@ -382,6 +398,7 @@
 
 
 
+
     function export_to_all() {
       if (contents.length > 0) {
         document.getElementById('export-markdown').innerHTML = get_markdown();
@@ -447,6 +464,7 @@
 
 
 
+
     function get_rd_cd_out() {
       // row_del_out = document.querySelector('input[name="row-del-out"]:checked').value;
       // if (row_del_out == "") {
@@ -461,8 +479,6 @@
     }
 
 
-
-
     function save_to_file(text) {
       var name = "";
       if (file) {
@@ -472,6 +488,7 @@
       name += "PEF_table_editor_file";
       SaveAsFile(text, name, "text/plain;charset=utf-8");
     }
+
 
 
 
