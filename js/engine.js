@@ -99,7 +99,7 @@
     function load() {
       row_del = document.querySelector('input[name="row-del"]:checked').value;
       if (row_del == "") {
-        row_del = docuement.getElementById("other-row-del");
+        row_del = document.getElementById("other-row-del");
       }
       row_del = new RegExp(row_del);
       col_del = document.querySelector('input[name="col-del"]:checked').value;
