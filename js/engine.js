@@ -99,12 +99,12 @@ function onChooseFile(event) {
 function load() {
   row_del = document.querySelector('input[name="row-del"]:checked').value;
   if (row_del == "") {
-    row_del = document.getElementById("other-row-del");
+    row_del = document.getElementById("other-row-del").value;
   }
   row_del = new RegExp(row_del);
   col_del = document.querySelector('input[name="col-del"]:checked').value;
   if (col_del == "") {
-    col_del = document.getElementById("other-col-del");
+    col_del = document.getElementById("other-col-del").value;
   }
   col_del = new RegExp(col_del);
   var fr = new FileReader();
